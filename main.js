@@ -3,11 +3,11 @@
    Scroll-driven satellite animation, interactions, and effects
    ================================================================ */
 
-import { initPropagator } from './src/orbit-propagator';
-import { initCesiumGlobe, toggleActiveSatellite, updateSatellitePositions } from './src/cesium-globe';
+import { initPropagator, addBackgroundSatellites, getPropagatedState } from './src/orbit-propagator';
+import { initCesiumGlobe, toggleActiveSatellite, updateSatellitePositions, initBackgroundSatellites, drawCollisionAlert, clearCollisionAlert } from './src/cesium-globe';
 import { initSarViewer, toggleSarMode, activateAIFusion } from './src/sar-viewer';
-import { initSSAEngine, updateRadarDots } from './src/ssa-engine';
-import { executeSandboxQuery } from './src/celestrak-client';
+import { initSSAEngine, updateRadarDots, computeConjunctions } from './src/ssa-engine';
+import { executeSandboxQuery, fetchBackgroundSatellites } from './src/celestrak-client';
 
 // ===== CONFIGURATION =====
 const FRAME_COUNT = 240;
@@ -262,44 +262,19 @@ function setupRevealAnimations() {
 
 // ===== SATELLITE TOGGLES =====
 function setupSatelliteToggles() {
-  const toggles = document.querySelectorAll('.sat-toggle');
-  const telemetryItems = document.querySelectorAll('.telemetry-item');
-
-  toggles.forEach((toggle) => {
-    toggle.addEventListener('click', () => {
-      toggles.forEach((t) => t.classList.remove('active'));
-      toggle.classList.add('active');
-
-      const satKey = toggle.dataset.sat;
-      const data = SATELLITE_DATA[satKey];
-      if (!data) return;
-
-      // Toggle globe camera
-      toggleActiveSatellite(satKey);
-
-      // Update telemetry panel title
-      const panelTitle = document.querySelector('.info-panel:nth-child(2) h4');
-      if (panelTitle) {
-        panelTitle.textContent = `Live Telemetry — ${data.name}`;
-      }
-
-      // Update values with animation
-      const values = ['alt', 'vel', 'inc', 'passes'];
-      telemetryItems.forEach((item, i) => {
-        const valEl = item.querySelector('.value');
-        if (valEl && values[i]) {
-          item.style.transform = 'scale(0.95)';
-          item.style.opacity = '0.5';
-          setTimeout(() => {
-            const unitEl = valEl.querySelector('.unit');
-            const unitText = unitEl ? unitEl.outerHTML : '';
-            valEl.innerHTML = data[values[i]] + unitText;
-            item.style.transform = 'scale(1)';
-            item.style.opacity = '1';
-          }, 150);
-          item.style.transition = 'transform 0.15s ease, opacity 0.15s ease';
-        }
-      });
+  const buttons = document.querySelectorAll('.sat-toggle');
+  
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update UI
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Get satellite key and update
+      const key = btn.dataset.sat;
+      activeSatKey = key;
+      toggleActiveSatellite(key);
+      updateTelemetryPanel(key);
     });
   });
 }
@@ -528,6 +503,137 @@ function setupTabs() {
         }
       });
     });
+  });
+}
+
+// ===== LIVE ORBIT TRACKER =====
+let bgKeys = [];
+let activeSatKey = 'teleos2';
+
+async function setupLiveOrbitTracker() {
+  // 1. Initialize propagator with main TLEs
+  const propReady = await initPropagator();
+  if (!propReady) {
+    console.error("Failed to initialize orbit propagator.");
+    return;
+  }
+
+  // 2. Fetch and initialize background satellites
+  const bgData = await fetchBackgroundSatellites();
+  if (Object.keys(bgData).length > 0) {
+    addBackgroundSatellites(bgData);
+    bgKeys = Object.keys(bgData);
+  }
+
+  // 3. Initialize Cesium Globe
+  const viewer = await initCesiumGlobe('cesiumContainer');
+  
+  if (bgKeys.length > 0) {
+    initBackgroundSatellites(bgKeys);
+  }
+
+  // Initial state
+  toggleActiveSatellite(activeSatKey);
+  updateTelemetryPanel(activeSatKey);
+
+  // Animation Loop (Update positions every frame)
+  setInterval(() => {
+    updateSatellitePositions(bgKeys);
+    updateCollisionAlertOverlay(); // Check alerts periodically
+  }, 1000 / 60);
+
+  // Setup click listener from Cesium
+  window.addEventListener('satelliteClicked', (e) => {
+    const key = e.detail;
+    
+    // Update UI buttons
+    document.querySelectorAll('.sat-toggle').forEach(btn => {
+      if (btn.dataset.sat === key) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    
+    // Update active logic
+    activeSatKey = key;
+    toggleActiveSatellite(key);
+    updateTelemetryPanel(key);
+  });
+}
+
+function updateCollisionAlertOverlay() {
+  const panel = document.getElementById('collision-alert-panel');
+  if (!panel) return;
+
+  // We'll show an alert only if teleos2 is active to match our mock narrative
+  if (activeSatKey === 'teleos2') {
+    const alerts = computeConjunctions();
+    const criticalAlert = alerts.find(a => a.critical);
+
+    if (criticalAlert) {
+      panel.style.display = 'block';
+      document.getElementById('alert-obj').innerText = criticalAlert.obj;
+      document.getElementById('alert-tca').innerText = criticalAlert.tca;
+      document.getElementById('alert-miss').innerText = criticalAlert.missDistance;
+
+      // Draw the 3D alert near the satellite
+      const satState = getPropagatedState(activeSatKey);
+      if (satState) {
+        drawCollisionAlert(activeSatKey, {
+          lon: satState.longitude + 0.1, // Fake debris position slightly offset
+          lat: satState.latitude + 0.05,
+          alt: satState.altitude * 1000 + 500
+        });
+      }
+    } else {
+      panel.style.display = 'none';
+      clearCollisionAlert();
+    }
+  } else {
+    panel.style.display = 'none';
+    clearCollisionAlert();
+  }
+}
+
+function updateTelemetryPanel(key) {
+  const data = SATELLITE_DATA[key];
+  if (!data) return;
+
+  const panelTitle = document.querySelector('.telemetry-panel h4');
+  if (panelTitle) {
+    panelTitle.textContent = `Live Telemetry — ${data.name}`;
+  }
+
+  const telemetryItems = document.querySelectorAll('.telemetry-item');
+  const values = ['alt', 'vel', 'inc', 'passes'];
+  
+  telemetryItems.forEach((item, i) => {
+    const valEl = item.querySelector('.value');
+    if (valEl && values[i]) {
+      item.style.transform = 'scale(0.95)';
+      item.style.opacity = '0.5';
+      setTimeout(() => {
+        const unitEl = valEl.querySelector('.unit');
+        const unitText = unitEl ? unitEl.outerHTML : '';
+        valEl.innerHTML = data[values[i]] + unitText;
+        item.style.transform = 'scale(1)';
+        item.style.opacity = '1';
+      }, 150);
+      item.style.transition = 'transform 0.15s ease, opacity 0.15s ease';
+    }
+  });
+
+  // Update Active Constellation list
+  document.querySelectorAll('.satellite-list li').forEach((li, index) => {
+    const statusSpan = li.querySelector('.status');
+    if (statusSpan) {
+      if (index === Object.keys(SATELLITE_DATA).indexOf(key)) {
+        statusSpan.classList.add('active');
+      } else {
+        statusSpan.classList.remove('active');
+      }
+    }
   });
 }
 

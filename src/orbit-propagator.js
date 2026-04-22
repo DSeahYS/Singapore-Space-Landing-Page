@@ -23,6 +23,19 @@ export async function initPropagator() {
   return Object.keys(satelliteRecs).length > 0;
 }
 
+export function addBackgroundSatellites(tleData) {
+  let count = 0;
+  for (const [key, tles] of Object.entries(tleData)) {
+    try {
+      satelliteRecs[key] = satellite.twoline2satrec(tles[0], tles[1]);
+      count++;
+    } catch (err) {
+      // ignore
+    }
+  }
+  return count;
+}
+
 export function getPropagatedState(key, date = new Date()) {
   const satrec = satelliteRecs[key];
   if (!satrec) return null;

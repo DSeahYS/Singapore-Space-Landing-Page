@@ -650,29 +650,73 @@ button {
 }
 
 /* ===== ORBIT TRACKER ===== */
-#orbit-tracker {
-  background: var(--surface);
-}
-
-.orbit-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 32px;
-  min-height: 560px;
-}
-
-.globe-container {
-  border-radius: 20px;
-  background: linear-gradient(135deg,
-    rgba(16, 44, 38, 0.4),
-    rgba(25, 25, 112, 0.2));
-  border: 1px solid var(--glass-border);
-  overflow: hidden;
+.full-bleed-tab {
   position: relative;
+  height: calc(100vh - 150px);
+  min-height: 800px;
+  margin-top: -24px; /* offset the tab nav padding to snap tighter */
+  padding: 0 !important;
+  border-top: 1px solid var(--outline);
+}
+
+.full-bleed-globe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.floating-ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none; /* Let clicks pass through to map by default */
+  padding-top: 40px;
+}
+
+/* Re-enable pointer events for specific UI panels */
+.floating-ui-overlay .glass-header,
+.floating-panels,
+.floating-toggles {
+  pointer-events: auto;
+}
+
+.glass-header {
+  max-width: 600px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  padding: 24px 32px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.floating-panels {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 500px;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+  /* position it on the right side if we want, or keep it left under header */
+}
+
+.floating-toggles {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  padding: 16px 24px;
+  border-radius: 100px;
+  border: 1px solid var(--glass-border);
 }
 
 .globe-placeholder {

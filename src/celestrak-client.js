@@ -137,3 +137,47 @@ function saveToCache(data) {
     console.warn('Could not save TLE cache:', e);
   }
 }
+
+/**
+ * Fetch ~100 background satellites for orbital context
+ */
+export async function fetchBackgroundSatellites() {
+  const bgCacheKey = 'sgspace_bg_tle_cache';
+  try {
+    const cachedStr = localStorage.getItem(bgCacheKey);
+    if (cachedStr) {
+      const cacheInfo = JSON.parse(cachedStr);
+      if (Date.now() - cacheInfo.timestamp < CACHE_TTL) {
+        return cacheInfo.data;
+      }
+    }
+    
+    // Fetch the 100 brightest satellites
+    const url = `${CELESTRAK_BASE_URL}?GROUP=visual&FORMAT=JSON`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Background fetch failed');
+    
+    const data = await response.json();
+    const results = {};
+    
+    // Parse into TLE array format and limit to ~150 objects to maintain 60fps
+    const limit = Math.min(data.length, 150);
+    for (let i = 0; i < limit; i++) {
+      const item = data[i];
+      // Skip if it's one of our main satellites to avoid duplicates
+      if (!Object.values(SATS).includes(parseInt(item.NORAD_CAT_ID))) {
+        results[`bg_${item.NORAD_CAT_ID}`] = [item.TLE_LINE1, item.TLE_LINE2];
+      }
+    }
+    
+    localStorage.setItem(bgCacheKey, JSON.stringify({
+      timestamp: Date.now(),
+      data: results
+    }));
+    
+    return results;
+  } catch (error) {
+    console.error('Failed to fetch background satellites:', error);
+    return {};
+  }
+}

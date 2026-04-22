@@ -1,4 +1,4 @@
-import { Viewer, Cartesian3, Color, Ion, Entity, PolylineGlowMaterialProperty, Math as CesiumMath, Cartesian2 } from 'cesium';
+import { Viewer, Cartesian3, Color, Ion, Entity, PolylineGlowMaterialProperty, Math as CesiumMath, Cartesian2, ScreenSpaceEventHandler, ScreenSpaceEventType, defined } from 'cesium';
 import { getPropagatedState, getFullOrbitPath } from './orbit-propagator';
 import { SATS } from './celestrak-client';
 
@@ -54,6 +54,9 @@ export async function initCesiumGlobe(containerId) {
     initSatelliteEntity(key);
   });
 
+  // Setup click handler
+  setupClickHandler();
+
   return viewer;
 }
 
@@ -69,13 +72,13 @@ function initSatelliteEntity(key) {
       name: `${key}-path`,
       polyline: {
         positions: positions,
-        width: 3,
+        width: 1, // thin by default
         material: new PolylineGlowMaterialProperty({
-          glowPower: 0.2,
+          glowPower: 0.1,
           taperPower: 0.1,
-          color: Color.fromCssColorString('#F7E7CE').withAlpha(0.6), // Champagne
+          color: Color.fromCssColorString('#F7E7CE').withAlpha(0.2), // Champagne dim
         }),
-        show: false // Hidden by default, shown when active
+        show: true // Always on now
       }
     });
   }
@@ -111,15 +114,29 @@ function initSatelliteEntity(key) {
   }
 }
 
-export function updateSatellitePositions() {
+export function updateSatellitePositions(bgKeys = []) {
   if (!viewer) return;
 
   const now = new Date();
   
+  // Update main sats
   Object.keys(SATS).forEach(key => {
     const state = getPropagatedState(key, now);
     const entity = satelliteEntities[key];
     
+    if (state && entity) {
+      entity.position = Cartesian3.fromDegrees(
+        state.longitude,
+        state.latitude,
+        state.altitude * 1000
+      );
+    }
+  });
+
+  // Update background sats
+  bgKeys.forEach(key => {
+    const state = getPropagatedState(key, now);
+    const entity = satelliteEntities[key];
     if (state && entity) {
       entity.position = Cartesian3.fromDegrees(
         state.longitude,
@@ -149,7 +166,12 @@ export function toggleActiveSatellite(key) {
     }
     
     if (path) {
-      path.polyline.show = isActive;
+      // Highlight path
+      path.polyline.width = isActive ? 3 : 1;
+      path.polyline.material.color = isActive 
+        ? Color.fromCssColorString('#F7E7CE').withAlpha(0.8)
+        : Color.fromCssColorString('#F7E7CE').withAlpha(0.2);
+      path.polyline.material.glowPower = isActive ? 0.3 : 0.05;
     }
   });
 
@@ -169,4 +191,80 @@ export function toggleActiveSatellite(key) {
       });
     }
   }
+}
+
+export function initBackgroundSatellites(keys) {
+  if (!viewer) return;
+  keys.forEach(key => {
+    const initialState = getPropagatedState(key);
+    if (initialState) {
+      satelliteEntities[key] = viewer.entities.add({
+        name: key,
+        position: Cartesian3.fromDegrees(
+          initialState.longitude,
+          initialState.latitude,
+          initialState.altitude * 1000
+        ),
+        point: {
+          pixelSize: 3,
+          color: Color.fromCssColorString('#ffffff').withAlpha(0.4),
+          show: true
+        }
+      });
+    }
+  });
+}
+
+function setupClickHandler() {
+  const handler = new ScreenSpaceEventHandler(viewer.scene.canvas);
+  handler.setInputAction((click) => {
+    const pickedObject = viewer.scene.pick(click.position);
+    if (defined(pickedObject) && pickedObject.id) {
+      const entityName = pickedObject.id.name;
+      // If it's one of our main satellites, dispatch event
+      if (Object.keys(SATS).includes(entityName)) {
+        window.dispatchEvent(new CustomEvent('satelliteClicked', { detail: entityName }));
+      }
+    }
+  }, ScreenSpaceEventType.LEFT_CLICK);
+}
+
+// Collision alert visuals
+let collisionLine = null;
+let debrisEntity = null;
+
+export function drawCollisionAlert(satKey, debrisCoord) {
+  if (!viewer) return;
+  clearCollisionAlert();
+
+  const satEnt = satelliteEntities[satKey];
+  if (!satEnt) return;
+
+  // Add flashing debris object
+  debrisEntity = viewer.entities.add({
+    position: Cartesian3.fromDegrees(debrisCoord.lon, debrisCoord.lat, debrisCoord.alt),
+    point: {
+      pixelSize: 12,
+      color: Color.fromCssColorString('#FF6B6B'), // Neon Coral
+      outlineColor: Color.WHITE,
+      outlineWidth: 2
+    }
+  });
+
+  // Draw connecting line
+  collisionLine = viewer.entities.add({
+    polyline: {
+      positions: [satEnt.position.getValue(viewer.clock.currentTime), debrisEntity.position.getValue(viewer.clock.currentTime)],
+      width: 2,
+      material: new PolylineGlowMaterialProperty({
+        glowPower: 0.5,
+        color: Color.fromCssColorString('#FF6B6B')
+      })
+    }
+  });
+}
+
+export function clearCollisionAlert() {
+  if (collisionLine) { viewer.entities.remove(collisionLine); collisionLine = null; }
+  if (debrisEntity) { viewer.entities.remove(debrisEntity); debrisEntity = null; }
 }
