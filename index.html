@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Singapore Space — Next-Generation Mission Control</title>
+  <meta name="description" content="Singapore's sovereign NEqO constellation — 5 satellites, 14 passes per day, sub-meter resolution. Explore the Next-Gen Mission Control hub." />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛰️</text></svg>" />
+</head>
+<body>
+
+  <!-- ===== STAR PARTICLES ===== -->
+  <div class="stars-container" id="stars"></div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="nav" id="main-nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo"><span>Singapore</span> Space</a>
+      <ul class="nav-links">
+        <li><a href="#orbit-tracker">Orbit Tracker</a></li>
+        <li><a href="#sar-explorer">Imagery Explorer</a></li>
+        <li><a href="#ssa-monitor">SSA Monitor</a></li>
+        <li><a href="#api-sandbox">API Sandbox</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== HERO: SCROLL-DRIVEN SATELLITE DISASSEMBLY ===== -->
+  <section id="hero">
+    <div class="hero-scroll-container">
+      <div class="hero-sticky">
+
+        <!-- Satellite animation canvas -->
+        <div class="satellite-canvas-wrap">
+          <canvas id="satellite-canvas" width="1456" height="816"></canvas>
+        </div>
+
+        <!-- Component labels (appear during disassembly) -->
+        <div class="component-labels" id="component-labels">
+          <span class="comp-label" style="top:20%; left:15%;">Solar Panels</span>
+          <span class="comp-label" style="top:25%; right:18%;">Reaction Wheels</span>
+          <span class="comp-label" style="top:60%; left:12%;">Optical Lens Assembly</span>
+          <span class="comp-label" style="bottom:30%; right:15%;">Avionics PCB</span>
+          <span class="comp-label" style="top:15%; left:45%;">Star Tracker</span>
+          <span class="comp-label" style="bottom:20%; left:20%;">CMOS Sensor</span>
+          <span class="comp-label" style="top:45%; right:10%;">MLI Foil Blanket</span>
+        </div>
+
+        <!-- Hero text (fades when scrolling) -->
+        <div class="hero-content" id="hero-content">
+          <p class="hero-eyebrow">Singapore's Sovereign Space Programme</p>
+          <h1 class="hero-title">Next-Generation<br>Mission Control</h1>
+          <p class="hero-subtitle">
+            Singapore's NEqO constellation — 5 satellites, 14 passes per day,
+            sub-meter resolution. Real-time intelligence from space.
+          </p>
+          <a href="#modules" class="hero-cta">
+            Enter Mission Control
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator" id="scroll-indicator">
+          <span>Scroll to explore</span>
+          <div class="scroll-line"></div>
+        </div>
+
+        <!-- Stats bar (appears after animation) -->
+        <div class="hero-stats" id="hero-stats" style="opacity: 0; transform: translateY(20px); transition: all 0.8s ease;">
+          <div class="stat-card">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Satellites</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">S$200M+</div>
+            <div class="stat-label">STDP Funding</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">3</div>
+            <div class="stat-label">SSA Partners</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">50cm</div>
+            <div class="stat-label">Resolution</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODULE STRIP ===== -->
+  <section id="modules">
+    <div class="container">
+      <div class="tool-header" style="text-align: center;">
+        <p class="section-label reveal">Mission Control Suite</p>
+        <h2 class="section-title reveal reveal-delay-1">Four Instruments.<br>One Command Deck.</h2>
+        <p class="section-subtitle reveal reveal-delay-2" style="margin: 0 auto;">
+          Real-time satellite operations, intelligence analytics, orbital threat detection,
+          and developer integration — unified under Singapore's sovereign space architecture.
+        </p>
+      </div>
+
+      <div class="modules-grid">
+        <!-- Card 1: Orbit Tracker -->
+        <div class="module-card reveal">
+          <div class="module-number">Tool 01</div>
+          <div class="module-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/><circle cx="12" cy="6" r="1.5" fill="currentColor"/></svg>
+          </div>
+          <h3>Sovereign Orbit Tracker</h3>
+          <p>Real-time monitoring of Singapore's NEqO constellation. 3D globe visualization with live telemetry and ground tracks.</p>
+          <a href="#orbit-tracker" class="module-link">Explore →</a>
+        </div>
+
+        <!-- Card 2: SAR Explorer -->
+        <div class="module-card reveal reveal-delay-1">
+          <div class="module-number">Tool 02</div>
+          <div class="module-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/><circle cx="15" cy="15" r="3"/></svg>
+          </div>
+          <h3>SAR &amp; Optical Explorer</h3>
+          <p>High-resolution electro-optical and synthetic aperture radar imagery. Day-night, all-weather intelligence with AI fusion.</p>
+          <a href="#sar-explorer" class="module-link">Explore →</a>
+        </div>
+
+        <!-- Card 3: SSA Monitor -->
+        <div class="module-card reveal reveal-delay-2">
+          <div class="module-number">Tool 03</div>
+          <div class="module-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
+          </div>
+          <h3>SSA Monitor</h3>
+          <p>Space Situational Awareness with conjunction screening, debris tracking, and AI-driven collision risk analytics.</p>
+          <a href="#ssa-monitor" class="module-link">Explore →</a>
+        </div>
+
+        <!-- Card 4: API Sandbox -->
+        <div class="module-card reveal reveal-delay-3">
+          <div class="module-number">Tool 04</div>
+          <div class="module-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/><path d="M14.5 4l-5 16"/></svg>
+          </div>
+          <h3>Space-as-a-Service API</h3>
+          <p>Developer sandbox for orbital data queries, imagery footprints, and SSA feeds. Backed by STDP 2.0 ecosystem.</p>
+          <a href="#api-sandbox" class="module-link">Explore →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SOVEREIGN ORBIT TRACKER ===== -->
+  <section id="orbit-tracker" class="tool-section">
+    <div class="container">
+      <div class="tool-header">
+        <p class="section-label reveal">Tool 01</p>
+        <h2 class="section-title reveal reveal-delay-1">Sovereign Orbit Tracker</h2>
+        <p class="section-subtitle reveal reveal-delay-2">
+          Track Singapore's five NEqO satellites in real-time. High-revisit equatorial orbit
+          optimised for Southeast Asia and maritime corridors.
+        </p>
+      </div>
+
+      <div class="orbit-layout">
+        <!-- Globe -->
+        <div class="globe-container reveal">
+          <div id="cesiumContainer" style="width: 100%; height: 100%;"></div>
+        </div>
+
+        <!-- Info panels -->
+        <div class="orbit-panels">
+          <div class="info-panel reveal reveal-delay-1">
+            <h4>Active Constellation</h4>
+            <ul class="satellite-list">
+              <li><span>TeLEOS-1 <small style="opacity:0.5">— Optical EO</small></span><span class="status"></span></li>
+              <li><span>TeLEOS-2 <small style="opacity:0.5">— PolSAR</small></span><span class="status"></span></li>
+              <li><span>DS-EO <small style="opacity:0.5">— Multispectral</small></span><span class="status"></span></li>
+              <li><span>NeuSAR <small style="opacity:0.5">— SAR Micro</small></span><span class="status"></span></li>
+              <li><span>DS-SAR <small style="opacity:0.5">— SAR</small></span><span class="status"></span></li>
+            </ul>
+          </div>
+
+          <div class="info-panel reveal reveal-delay-2">
+            <h4>Live Telemetry — TeLEOS-2</h4>
+            <div class="telemetry-grid">
+              <div class="telemetry-item">
+                <div class="label">Altitude</div>
+                <div class="value">570<span class="unit">km</span></div>
+              </div>
+              <div class="telemetry-item">
+                <div class="label">Velocity</div>
+                <div class="value">7.6<span class="unit">km/s</span></div>
+              </div>
+              <div class="telemetry-item">
+                <div class="label">Inclination</div>
+                <div class="value">10<span class="unit">°</span></div>
+              </div>
+              <div class="telemetry-item">
+                <div class="label">Passes/Day</div>
+                <div class="value">14</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-panel reveal reveal-delay-3" style="padding: 20px 28px;">
+            <h4>Operators</h4>
+            <div style="display:flex; gap:16px; flex-wrap:wrap;">
+              <span style="padding:6px 14px; background:var(--surface-container-lowest); border-radius:8px; font-size:0.75rem; color:var(--on-surface-variant);">ST Engineering</span>
+              <span style="padding:6px 14px; background:var(--surface-container-lowest); border-radius:8px; font-size:0.75rem; color:var(--on-surface-variant);">DSTA</span>
+              <span style="padding:6px 14px; background:var(--surface-container-lowest); border-radius:8px; font-size:0.75rem; color:var(--on-surface-variant);">DSO</span>
+              <span style="padding:6px 14px; background:var(--surface-container-lowest); border-radius:8px; font-size:0.75rem; color:var(--on-surface-variant);">OSTIn</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Satellite toggles -->
+      <div class="satellite-toggles reveal">
+        <button class="sat-toggle active" data-sat="teleos2"><span>TeLEOS-2</span></button>
+        <button class="sat-toggle" data-sat="teleos1"><span>TeLEOS-1</span></button>
+        <button class="sat-toggle" data-sat="dseo"><span>DS-EO</span></button>
+        <button class="sat-toggle" data-sat="neusar"><span>NeuSAR</span></button>
+        <button class="sat-toggle" data-sat="dssar"><span>DS-SAR</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SAR & OPTICAL EXPLORER ===== -->
+  <section id="sar-explorer" class="tool-section">
+    <div class="container">
+      <div class="tool-header">
+        <p class="section-label reveal">Tool 02</p>
+        <h2 class="section-title reveal reveal-delay-1">SAR &amp; Optical Imagery Explorer</h2>
+        <p class="section-subtitle reveal reveal-delay-2">
+          Multi-modal Earth observation combining electro-optical and synthetic aperture radar
+          sensors for day-night, all-weather intelligence.
+        </p>
+      </div>
+
+      <div class="sar-layout reveal">
+        <!-- Left toolbar -->
+        <div class="sar-toolbar">
+          <div class="mode-switch">
+            <button class="mode-btn active" id="mode-optical">Optical</button>
+            <button class="mode-btn" id="mode-sar">SAR</button>
+          </div>
+          <div>
+            <h4 style="font-size:0.65rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--outline); margin-bottom:12px;">Data Sources</h4>
+            <ul class="source-list">
+              <li class="active">TeLEOS-1</li>
+              <li>DS-EO <span class="source-badge">0.5m</span></li>
+              <li>NeuSAR</li>
+              <li>DS-SAR</li>
+              <li>TeLEOS-2 <span class="source-badge">PolSAR</span></li>
+              <li>ICEYE <span class="source-badge">Partner</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Image viewer -->
+        <div class="sar-viewer">
+          <div class="sar-viewer-inner">
+            <div class="scan-lines"></div>
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--outline)" stroke-width="0.5" style="opacity:0.3; margin-bottom:16px;">
+              <rect x="2" y="2" width="20" height="20" rx="2"/>
+              <path d="M2 8h20"/>
+              <path d="M8 2v20"/>
+              <circle cx="15" cy="15" r="4"/>
+              <path d="M17 17l3 3"/>
+            </svg>
+            <p style="font-size:0.8rem; color:var(--on-surface-variant); letter-spacing:0.08em;">STRAITS OF MALACCA — Optical Feed</p>
+            <p style="font-size:0.65rem; color:var(--outline); margin-top:6px;">1.0m GSD · TeLEOS-1 · Pass 0742 UTC</p>
+          </div>
+          <div class="sar-tooltip">💡 SAR detects targets through clouds and at night</div>
+        </div>
+
+        <!-- AI panel -->
+        <div class="ai-panel">
+          <button class="ai-fusion-btn" id="ai-fusion-btn">⚡ Activate AI Fusion</button>
+          <div class="detection-results glass-panel">
+            <h4>Detection Results</h4>
+            <div class="detection-item">
+              <div class="det-type">Vessel — Cargo Ship</div>
+              <div class="det-conf">Confidence: 97.2% · MMSI: 563002140</div>
+            </div>
+            <div class="detection-item">
+              <div class="det-type">Vessel — Dark Target</div>
+              <div class="det-conf">Confidence: 84.1% · No AIS Signal</div>
+            </div>
+            <div class="detection-item">
+              <div class="det-type">Oil Anomaly</div>
+              <div class="det-conf">Confidence: 91.5% · Area: 0.3km²</div>
+            </div>
+            <p style="margin-top:16px; font-size:0.7rem; color:var(--outline); line-height:1.5;">
+              Powered by ST Engineering Geo-Insights analytics and GEOEARTH platform.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SSA MONITOR ===== -->
+  <section id="ssa-monitor" class="tool-section">
+    <div class="container">
+      <div class="tool-header" style="text-align:center;">
+        <p class="section-label reveal">Tool 03</p>
+        <h2 class="section-title reveal reveal-delay-1">Space Situational Awareness Monitor</h2>
+        <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto;">
+          Conjunction screening, debris tracking, and collision risk analytics
+          powered by partnerships with Digantara and LeoLabs.
+        </p>
+      </div>
+
+      <div class="ssa-layout">
+        <!-- Alert panel -->
+        <div class="alert-panel reveal">
+          <h4 style="font-size:0.7rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--neon-coral); margin-bottom:4px;">⚠ Active Alerts</h4>
+          <div class="alert-card">
+            <div class="alert-led"></div>
+            <h5>Conjunction Warning — TeLEOS-2</h5>
+            <div class="alert-detail"><span class="ad-label">Object</span><span class="ad-value">COSMOS 2251 DEB</span></div>
+            <div class="alert-detail"><span class="ad-label">TCA</span><span class="ad-value">14:32 UTC</span></div>
+            <div class="alert-detail"><span class="ad-label">Miss Distance</span><span class="ad-value">847 m</span></div>
+            <div class="alert-detail"><span class="ad-label">Pc</span><span class="ad-value" style="color:var(--neon-coral);">1.2×10⁻⁴</span></div>
+          </div>
+          <div class="alert-card" style="border-left-color: var(--champagne);">
+            <h5 style="color: var(--champagne);">Proximity Watch — NeuSAR</h5>
+            <div class="alert-detail"><span class="ad-label">Object</span><span class="ad-value">SL-8 R/B</span></div>
+            <div class="alert-detail"><span class="ad-label">TCA</span><span class="ad-value">19:15 UTC</span></div>
+            <div class="alert-detail"><span class="ad-label">Miss Distance</span><span class="ad-value">2.3 km</span></div>
+            <div class="alert-detail"><span class="ad-label">Pc</span><span class="ad-value">4.7×10⁻⁶</span></div>
+          </div>
+        </div>
+
+        <!-- Radar display -->
+        <div class="radar-container reveal" id="radar-display">
+          <div class="radar-rings">
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+            <div class="radar-ring"></div>
+          </div>
+          <div class="radar-sweep"></div>
+          <div class="radar-center"></div>
+          <!-- Dots populated by JS -->
+        </div>
+
+        <!-- Feed panel -->
+        <div class="feed-panel reveal reveal-delay-1">
+          <h4 style="font-size:0.7rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--champagne); margin-bottom:4px;">SSA Data Feeds</h4>
+          <div class="feed-card">
+            <div class="feed-name">Digantara</div>
+            <div class="feed-status"><span class="dot"></span> Connected — Real-time</div>
+            <div class="feed-desc">Space-borne sensor network with AI-driven analytics for conjunction screening and flight dynamics.</div>
+          </div>
+          <div class="feed-card">
+            <div class="feed-name">LeoLabs</div>
+            <div class="feed-status"><span class="dot"></span> Connected — Real-time</div>
+            <div class="feed-desc">Global phased-array radar network for high-precision LEO tracking and space traffic management.</div>
+          </div>
+          <div class="feed-card">
+            <div class="feed-name">Space-Track (18 SDS)</div>
+            <div class="feed-status"><span class="dot" style="background:#F59E0B; box-shadow:0 0 6px rgba(245,158,11,0.5);"></span> Batch — 6h cycle</div>
+            <div class="feed-desc">US DoD public catalog data via GP/OMM format for supplementary orbit determination.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SSA Stats -->
+      <div class="ssa-stats reveal">
+        <div class="ssa-stat">
+          <div class="stat-num">36,500+</div>
+          <div class="stat-desc">Tracked Debris Objects</div>
+        </div>
+        <div class="ssa-stat">
+          <div class="stat-num">10,000+</div>
+          <div class="stat-desc">Active Satellites</div>
+        </div>
+        <div class="ssa-stat">
+          <div class="stat-num">14</div>
+          <div class="stat-desc">Daily Passes</div>
+        </div>
+        <div class="ssa-stat">
+          <div class="stat-num">3</div>
+          <div class="stat-desc">Partner Networks</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== API SANDBOX ===== -->
+  <section id="api-sandbox" class="tool-section">
+    <div class="container">
+      <div class="tool-header">
+        <p class="section-label reveal">Tool 04</p>
+        <h2 class="section-title reveal reveal-delay-1">Space-as-a-Service API Sandbox</h2>
+        <p class="section-subtitle reveal reveal-delay-2">
+          Query orbital data, request imagery footprints, and subscribe to SSA alerts.
+          Built on Singapore's STDP 2.0 ecosystem with S$200M+ in committed funding.
+        </p>
+      </div>
+
+      <div class="api-layout reveal">
+        <!-- Code editor -->
+        <div class="code-editor">
+          <div class="editor-tabs">
+            <div class="editor-tab active">Request</div>
+            <div class="editor-tab">Headers</div>
+            <div class="editor-tab">Auth</div>
+          </div>
+          <div class="code-content">
+<pre><span class="cmt">// Query TeLEOS-2 imagery footprints</span>
+<span class="kw">const</span> response = <span class="kw">await</span> fetch(<span class="str">'https://api.sgspace.gov.sg/v1/imagery'</span>, {
+  <span class="key">method:</span> <span class="str">'POST'</span>,
+  <span class="key">headers:</span> {
+    <span class="str">'Authorization'</span>: <span class="str">'Bearer ${STDP_TOKEN}'</span>,
+    <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>
+  },
+  <span class="key">body:</span> JSON.stringify({
+    <span class="key">satellite:</span> <span class="str">'TeLEOS-2'</span>,
+    <span class="key">mode:</span> <span class="str">'PolSAR'</span>,
+    <span class="key">bbox:</span> [<span class="num">103.6</span>, <span class="num">1.15</span>, <span class="num">104.1</span>, <span class="num">1.47</span>],
+    <span class="key">dateRange:</span> {
+      <span class="key">start:</span> <span class="str">'2026-04-01'</span>,
+      <span class="key">end:</span> <span class="str">'2026-04-21'</span>
+    },
+    <span class="key">resolution:</span> <span class="str">'1m'</span>,
+    <span class="key">polarization:</span> <span class="str">'full'</span>
+  })
+});</pre>
+          </div>
+          <div class="execute-btn-wrap">
+            <button class="execute-btn" id="execute-btn">▶ Execute</button>
+          </div>
+        </div>
+
+        <!-- Response panel -->
+        <div class="response-panel" id="response-panel">
+          <div class="response-header">
+            <span class="response-status pending" id="response-status">Waiting</span>
+            <span style="font-size:0.7rem; color:var(--outline);">POST /v1/imagery</span>
+          </div>
+          <div class="response-body" id="response-body">
+<pre style="opacity:0.4;">// Click "Execute" to send request...</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- STDP info bar -->
+      <div class="api-info-bar reveal">
+        <div>
+          <div class="info-text">STDP 2.0 — Space Technology Development Programme</div>
+          <div class="info-sub">S$200M+ committed to satellite technology, space robotics, and commercialisation. Managed by OSTIn & NRF.</div>
+        </div>
+        <div style="display:flex; gap:12px;">
+          <span style="padding:8px 16px; background:var(--surface-container); border-radius:8px; font-size:0.7rem; color:var(--on-surface-variant);">OSTIn</span>
+          <span style="padding:8px 16px; background:var(--surface-container); border-radius:8px; font-size:0.7rem; color:var(--on-surface-variant);">NRF</span>
+          <span style="padding:8px 16px; background:var(--surface-container); border-radius:8px; font-size:0.7rem; color:var(--on-surface-variant);">Geo‑Insights</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TIMELINE ===== -->
+  <section id="timeline">
+    <div class="container">
+      <div class="tool-header" style="text-align:center;">
+        <p class="section-label reveal">Our Journey</p>
+        <h2 class="section-title reveal reveal-delay-1">The Singapore Space Story</h2>
+        <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto;">
+          From a single optical satellite to a multi-modal constellation with sovereign SSA capabilities.
+        </p>
+      </div>
+
+      <div class="timeline-track">
+        <div class="timeline-line-wrap">
+          <div class="timeline-line">
+            <div class="timeline-line-progress" id="timeline-progress"></div>
+          </div>
+          <div class="timeline-items">
+            <div class="timeline-item active">
+              <div class="timeline-dot"></div>
+              <div class="timeline-card">
+                <div class="timeline-year">2015</div>
+                <div class="timeline-event">TeLEOS-1 Launch</div>
+                <div class="timeline-desc">Singapore's first commercial Earth-observation satellite. 1m optical resolution in NEqO.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-card">
+                <div class="timeline-year">2022</div>
+                <div class="timeline-event">DS-EO &amp; NeuSAR</div>
+                <div class="timeline-desc">Multi-spectral optical and first fully polarimetric SAR microsatellite, designed by DSO.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-card">
+                <div class="timeline-year">2023</div>
+                <div class="timeline-event">TeLEOS-2 &amp; DS-SAR</div>
+                <div class="timeline-desc">PolSAR satellite with 1m SAR resolution and all-weather imaging capability. ~14 passes/day.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-card">
+                <div class="timeline-year">2025</div>
+                <div class="timeline-event">STDP 2.0 Funding</div>
+                <div class="timeline-desc">S$60M top-up announced. Total STDP commitment exceeds S$200M for space innovation.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-card">
+                <div class="timeline-year">2026</div>
+                <div class="timeline-event">SSA Partnerships</div>
+                <div class="timeline-desc">DSTA-Digantara and ST Engineering-LeoLabs collaborations for sovereign space traffic management.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="footer-governance reveal">
+        <h3>Governance &amp; Sustainability</h3>
+        <p>
+          Singapore is committed to responsible space use and sustainable orbital operations.
+          Through SSA partnerships with Digantara and LeoLabs, and alignment with international
+          space traffic management frameworks, Singapore ensures the long-term viability of the
+          near-equatorial orbital environment.
+        </p>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-name">Singapore Space</div>
+          <p class="brand-tagline">
+            Next-Generation Mission Control — real-time satellite operations,
+            intelligence analytics, and developer integration for Singapore's
+            sovereign space programme.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Tools</h4>
+          <ul>
+            <li><a href="#orbit-tracker">Orbit Tracker</a></li>
+            <li><a href="#sar-explorer">Imagery Explorer</a></li>
+            <li><a href="#ssa-monitor">SSA Monitor</a></li>
+            <li><a href="#api-sandbox">API Sandbox</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Partners</h4>
+          <ul>
+            <li><a href="#">ST Engineering</a></li>
+            <li><a href="#">DSTA</a></li>
+            <li><a href="#">DSO National Labs</a></li>
+            <li><a href="#">OSTIn</a></li>
+            <li><a href="#">ICEYE</a></li>
+            <li><a href="#">LeoLabs</a></li>
+            <li><a href="#">Digantara</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="https://www.a-star.edu.sg/ostin" target="_blank">STDP Documentation</a></li>
+            <li><a href="https://www.stengg.com/en/geo-insights/" target="_blank">Geo-Insights Portal</a></li>
+            <li><a href="https://www.space-track.org" target="_blank">Space-Track</a></li>
+            <li><a href="https://celestrak.org" target="_blank">CelesTrak</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Singapore Space. All rights reserved.</p>
+        <p class="tagline">Built for Singapore's sovereign space future.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
