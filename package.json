@@ -17,5 +17,8 @@
     "gsap": "^3.12.0",
     "satellite.js": "^4.1.4",
     "vite-plugin-cesium": "^1.2.23"
+  },
+  "overrides": {
+    "magic-string": "^0.30.0"
   }
 }

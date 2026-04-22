@@ -505,12 +505,39 @@ function setupSmoothScroll() {
   });
 }
 
+// ===== TABS LOGIC =====
+function setupTabs() {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-tab');
+      
+      // Update buttons
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Update panes
+      tabPanes.forEach(pane => {
+        pane.classList.remove('active');
+        if (pane.id === targetId) {
+          pane.classList.add('active');
+          // Dispatch a resize event so Cesium/maps can redraw properly
+          setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+        }
+      });
+    });
+  });
+}
+
 // ===== INITIALISE EVERYTHING =====
 function init() {
   createStars();
   setupNav();
   new SatelliteAnimator();
   setupRevealAnimations();
+  setupTabs();
   setupSatelliteToggles();
   setupSarModes();
   setupAiFusion();

@@ -149,9 +149,17 @@
       </div>
     </div>
   </section>
+  <!-- ===== DASHBOARD TABS ===== -->
+  <nav class="tabs-nav container">
+    <button class="tab-btn active" data-tab="orbit-tracker">01 Orbit Tracker</button>
+    <button class="tab-btn" data-tab="sar-explorer">02 SAR Explorer</button>
+    <button class="tab-btn" data-tab="ssa-monitor">03 SSA Monitor</button>
+    <button class="tab-btn" data-tab="api-sandbox">04 API Sandbox</button>
+  </nav>
 
+  <div id="dashboard-content">
   <!-- ===== SOVEREIGN ORBIT TRACKER ===== -->
-  <section id="orbit-tracker" class="tool-section">
+  <div id="orbit-tracker" class="tab-pane active">
     <div class="container">
       <div class="tool-header">
         <p class="section-label reveal">Tool 01</p>
@@ -224,10 +232,10 @@
         <button class="sat-toggle" data-sat="dssar"><span>DS-SAR</span></button>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- ===== SAR & OPTICAL EXPLORER ===== -->
-  <section id="sar-explorer" class="tool-section">
+  <div id="sar-explorer" class="tab-pane">
     <div class="container">
       <div class="tool-header">
         <p class="section-label reveal">Tool 02</p>
@@ -299,10 +307,10 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- ===== SSA MONITOR ===== -->
-  <section id="ssa-monitor" class="tool-section">
+  <div id="ssa-monitor" class="tab-pane">
     <div class="container">
       <div class="tool-header" style="text-align:center;">
         <p class="section-label reveal">Tool 03</p>
@@ -388,10 +396,10 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- ===== API SANDBOX ===== -->
-  <section id="api-sandbox" class="tool-section">
+  <div id="api-sandbox" class="tab-pane">
     <div class="container">
       <div class="tool-header">
         <p class="section-label reveal">Tool 04</p>
@@ -524,7 +532,8 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
+  </div> <!-- end dashboard-content -->
 
   <!-- ===== FOOTER ===== -->
   <footer>
